@@ -25,7 +25,40 @@ def check_input(input):
         and 'password' in input\
         else False
 
+def get_user_info(username):
+    selected_database = mongo_client[database]
 
+    user_column = selected_database['Usuarios']
+    
+    user_row_result = user_column.find_one({'_id': username}, {'password': 1, 'email': 1,'name': 1, 'profile_picture': 1})
+
+    return user_row_result
+
+
+def login(username, password) -> Union[dict, int]:
+    user_db_info = get_user_info(username)
+    message_to_request = {
+        'message': 'User not authorized or not exist!',
+    }
+    status_code = 401
+    if user_db_info is not None:
+        user_password_in_db = user_db_info.get("password")
+        is_a_valid_password = check_password(
+            user_pw=user_password_in_db,
+            password=password
+        )
+        # verificando se a senha esta correta 
+        if is_a_valid_password:
+            one_day_foward = timedelta(hours=24)
+            json_web_token = jwt.encode({'user': username, 'exp': datetime.utcnow()
+                                         + one_day_foward}, secret_key)
+            message_to_request = \
+                generate_message_to_request(
+                    user_info=user_db_info, token=json_web_token)
+            status_code = 200
+        else:
+            pass
+    return message_to_request, status_code
 
 def main(request):
 
