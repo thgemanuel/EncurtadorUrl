@@ -35,6 +35,16 @@ def get_user_info(username):
     return user_row_result
 
 
+
+def check_password(user_pw, password):
+    if(user_pw == password):
+        return True
+    
+    # password_encoded = password.encode("UTF-8")
+    # is_a_valid_password = bcrypt.checkpw(password_encoded, user_pw)
+    # return is_a_valid_password
+    return False
+
 def login(username, password) -> Union[dict, int]:
     user_db_info = get_user_info(username)
     message_to_request = {
