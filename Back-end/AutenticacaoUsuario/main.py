@@ -34,7 +34,15 @@ def get_user_info(username):
 
     return user_row_result
 
-
+def generate_message_to_request(user_info, token) -> dict:
+    message_to_request = {
+        "message": "User authenticated!",
+        "username": user_info.get("_id"),
+        "name": user_info.get("name"),
+        "profile_picture": user_info.get("profile_picture"),
+        "token":  token,
+    }
+    return message_to_request
 
 def check_password(user_pw, password):
     if(user_pw == password):
