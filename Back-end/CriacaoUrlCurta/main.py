@@ -1,10 +1,13 @@
 from datetime import datetime, timedelta
+from math import trunc
 from select import select
 from bson.objectid import ObjectId
 from typing import Union
 import pymongo
 import urllib
 import jwt
+import hashlib
+
 
 secret_key = 'Wh$hOPdRhXyypJvVQ0%HRnM#wCD$7vRL2aORTFOhsS%DRycvhp'
 
@@ -15,6 +18,7 @@ database = 'EncurtadorUrl'
 connection_string = f"mongodb://encurtador:{mongo_cluster_password}@ac-najnv2m-shard-00-00.fwwgsf4.mongodb.net:27017,ac-najnv2m-shard-00-01.fwwgsf4.mongodb.net:27017,ac-najnv2m-shard-00-02.fwwgsf4.mongodb.net:27017/?ssl=true&replicaSet=atlas-11dfhp-shard-0&authSource=admin&retryWrites=true&w=majority" 
 
 mongo_client = pymongo.MongoClient(connection_string)
+selected_database = mongo_client[database]
 
 #Checa se o parâmetro input possui todos os seguintes atributos.
 def check_input(input):
@@ -24,6 +28,46 @@ def check_input(input):
     return True if 'username' in input \
         and 'original_url' in input\
         else False
+
+def salvaUrlEncurtada(username, original_url, url_encurtada):
+    #Pegando timestamp da requisição
+    datetime_now = datetime.now()
+    timestamp = datetime.timestamp(datetime_now)
+
+    #Truncando timestamp (Transforma double em int)
+    timestamp = trunc(timestamp)
+
+    #Selecionar database
+    event_column = selected_database['UrlsEncurtadas']
+
+    event_obj = {
+        'user_id': username,
+        'original_url': original_url,
+        'url_encurtada': url_encurtada,
+        'timestamp': timestamp
+    }
+
+    try:
+        #Insere no Banco de Dados
+        event_column.insert_one(event_obj)
+        return True
+    except:
+        return False
+
+
+def teste_url(url_encurtada):
+    return True
+
+def encurtaUrl(username, original_url) -> Union[dict, int]:
+   
+    hash_object = hashlib.sha256(original_url)
+    url_encurtada = hash_object.hexdigest()[:7]
+    url_ja_encurtada = teste_url(url_encurtada)
+
+    if url_ja_encurtada:
+        return True
+
+    salvaUrlEncurtada(username, original_url, url_encurtada)
 
 def main(request):
 
@@ -49,7 +93,7 @@ def main(request):
         if has_user_and_url:
             username = body_request.get("username")
             original_url = body_request.get("original_url")
-            message_to_request, status_code = login(username, password)
+            message_to_request, status_code = encurtaUrl(username, original_url)
             print(type(message_to_request))
             print(status_code)
             return message_to_request, status_code,headers
