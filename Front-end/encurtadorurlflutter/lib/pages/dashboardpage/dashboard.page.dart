@@ -70,11 +70,9 @@ class _DashBoardPageState extends State<DashBoardPage> {
                         child: InkWell(
                           customBorder: const CircleBorder(),
                           onTap: () {},
-                          child: ClipOval(
-                            child: Image(
-                              image: MemoryImage(base64Decode(
+                          child: CircleAvatar(
+                            backgroundImage: MemoryImage(base64Decode(
                                   snapshot.data?['profile_picture'])),
-                            ),
                           ),
                         ),
                       ),
