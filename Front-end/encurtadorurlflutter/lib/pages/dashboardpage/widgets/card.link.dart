@@ -9,7 +9,11 @@ import 'package:http/http.dart' as http;
 bool loading = false;
 
 class CardLinkLogado extends StatefulWidget {
-  const CardLinkLogado({Key? key}) : super(key: key);
+  final username;
+  const CardLinkLogado({
+    Key? key,
+    required this.username,
+  }) : super(key: key);
 
   @override
   State<CardLinkLogado> createState() => _CardLinkLogadoState();
@@ -51,7 +55,8 @@ class _CardLinkLogadoState extends State<CardLinkLogado> {
                                   callback: () {
                                     setState(() {
                                       loading = true;
-                                      shortenUrl(url: linkController.text);
+                                      shortenUrl(
+                                          linkController.text, widget.username);
                                     });
                                   }),
                             ),
@@ -87,8 +92,8 @@ class _CardLinkLogadoState extends State<CardLinkLogado> {
                                             if (linkController
                                                 .text.isNotEmpty) {
                                               loading = true;
-                                              shortenUrl(
-                                                  url: linkController.text);
+                                              shortenUrl(linkController.text,
+                                                  widget.username);
                                             }
                                           });
                                         },
@@ -101,7 +106,6 @@ class _CardLinkLogadoState extends State<CardLinkLogado> {
                                     ),
                             ),
                           ),
-                          
                         ]),
                       )
                     ],
@@ -195,17 +199,27 @@ class _CardLinkLogadoState extends State<CardLinkLogado> {
       );
 
   // consumindo API para encurtar
-  void shortenUrl({required String url}) async {
+  void shortenUrl(String url, String username) async {
     try {
-      final result = await http.post(
-          Uri.parse('https://cleanuri.com/api/v1/shorten'),
-          body: {'url': url});
+      final responseURL = await http.post(
+        Uri.parse('http://127.0.0.1:8080'),
+        //uriDF,
+        headers: <String, String>{
+          'Access-Control-Allow-Origin': '*',
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(<String, String>{
+          'username': username,
+          'url_original': url,
+        }),
+      );
 
-      if (result.statusCode == 200) {
+      Map<String, dynamic> response = jsonDecode(responseURL.body);
+
+      if (responseURL.statusCode == 201) {
         setState(() {
           loading = false;
-          final jsonResult = jsonDecode(result.body);
-          String resultUrl = jsonResult['result_url'];
+          String resultUrl = response['url_encurtada'].toString();
           openDialogUrl(resultUrl);
         });
       }
