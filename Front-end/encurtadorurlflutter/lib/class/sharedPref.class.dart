@@ -9,7 +9,6 @@ class SharedPref {
 
   save(String key, value) async {
     final prefs = await SharedPreferences.getInstance();
-    print(value);
     prefs.setString(key, json.encode(value));
   }
 
