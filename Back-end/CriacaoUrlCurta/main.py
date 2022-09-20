@@ -65,11 +65,9 @@ def teste_url(url_encurtada):
 
     return False
 
-def generate_message_to_request(username, original_url, url_encurtada) -> dict:
+def generate_message_to_request(url_encurtada) -> dict:
     message_to_request = {
         "message": "Url encurtada!",
-        "username": username,
-        "original_url": original_url,
         "url_encurtada": url_encurtada,
     }
     return message_to_request
@@ -79,7 +77,7 @@ def encurtaUrl(username, original_url) -> Union[dict, int]:
     hash_object = hashlib.sha256(original_url)
     url_encurtada = hash_object.hexdigest()[:7]
     url_ja_encurtada = teste_url(url_encurtada)
-    message_to_request = generate_message_to_request(username, original_url, url_encurtada)
+    message_to_request = generate_message_to_request(url_encurtada)
 
     if url_ja_encurtada:
         return message_to_request
