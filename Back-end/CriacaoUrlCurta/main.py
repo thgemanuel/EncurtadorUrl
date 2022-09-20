@@ -80,10 +80,10 @@ def encurtaUrl(username, original_url) -> Union[dict, int]:
     message_to_request = generate_message_to_request(url_encurtada)
 
     if url_ja_encurtada:
-        return message_to_request
+        return message_to_request,200
 
     salvaUrlEncurtada(username, original_url, url_encurtada)
-    return message_to_request
+    return message_to_request,201
 
 
 def main(request):
