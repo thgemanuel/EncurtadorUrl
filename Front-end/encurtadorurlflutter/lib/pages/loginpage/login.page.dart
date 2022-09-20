@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:test_encurtar_link/pages/loginpage/widgets/backHome.button.dart';
 import '../../class/sharedPref.class.dart';
-import '../../class/usuario.class.dart';
+import '../../class/Usuario.class.dart';
 import '../../functions/authentication.function.dart';
 import '../../widgets/text.submitbutton.dart';
 import 'widgets/textfieldemail.widget.dart';
@@ -41,9 +41,11 @@ class _LoginPageState extends State<LoginPage> {
         loading = false;
         emailController.clear();
         passwordController.clear();
-        SharedPref()
-            .save('user_info', Usuario.fromJson(jsonDecode(response.body)));
 
+        SharedPref().save(
+          'user_info',
+          Usuario.fromJson(jsonDecode(response.body)),
+        );
         Navigator.of(context).pushNamed('/dashboard');
       });
     } else {

@@ -231,15 +231,26 @@ class _HomePageState extends State<HomePage> {
   // consumindo API para encurtar
   void shortenUrl({required String url}) async {
     try {
-      final result = await http.post(
-          Uri.parse('https://cleanuri.com/api/v1/shorten'),
-          body: {'url': url});
+      final responseURL = await http.post(
+        Uri.parse('http://127.0.0.1:8080'),
+        //uriDF,
+        headers: <String, String>{
+          'Access-Control-Allow-Origin': '*',
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(<String, String>{
+          'username': '-',
+          'url_original': url,
+        }),
+      );
 
-      if (result.statusCode == 200) {
+      Map<String, dynamic> response =
+          jsonDecode(responseURL.body);
+
+      if (responseURL.statusCode == 201) {
         setState(() {
           loading = false;
-          final jsonResult = jsonDecode(result.body);
-          String resultUrl = jsonResult['result_url'];
+          String resultUrl = response['url_encurtada'].toString();
           openDialogUrl(resultUrl);
         });
       }

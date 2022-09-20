@@ -1,37 +1,54 @@
 class Usuario {
-  final String company_id;
-  //final List<dynamic> favorite_list;
-  final String first_name;
-  final String last_name;
-  final String message;
-  final String permissions;
-  final String profile_picture;
-  final String token;
-  final String username;
+  String? _userid;
+  String? _name;
+  String? _profilePicture;
+  String? _token;
 
-  const Usuario({
-    required this.company_id,
-    //required this.favorite_list,
-    required this.first_name,
-    required this.last_name,
-    required this.message,
-    required this.permissions,
-    required this.profile_picture,
-    required this.token,
-    required this.username,
-  });
+  Usuario();
 
-  factory Usuario.fromJson(Map<String, dynamic> json) {
-    return Usuario(
-      company_id: json['company_id'].toString(),
-      //favorite_list: json['favorite_list'] as List<dynamic>,
-      first_name: json['first_name'].toString(),
-      last_name: json['last_name'].toString(),
-      message: json['message'].toString(),
-      permissions: json['permissions'].toString(),
-      profile_picture: json['profile_picture'].toString(),
-      token: json['token'].toString(),
-      username: json['username'].toString(),
-    );
+  String? _getUserID() {
+    return this._userid;
   }
+
+  String? _getName() {
+    return this._name;
+  }
+
+  String? _getProfilePicture() {
+    return this._profilePicture;
+  }
+
+  String? _getToken() {
+    return this._token;
+  }
+
+  void _setUserID(userid) {
+    this._userid = userid;
+  }
+
+  void _setName(name) {
+    this._name = name;
+  }
+
+  void _setProfilePicture(_profilePicture) {
+    this._profilePicture = _profilePicture;
+  }
+
+  void _setToken(token) {
+    this._token = token;
+  }
+
+  Usuario.fromJson(Map<String, dynamic> json) {
+    _setUserID(json['username']);
+    _setName(json['name']);
+    _setProfilePicture(json['profile_picture']);
+    _setToken(json['token']);
+  }
+
+  Map<String, dynamic> toJson() => {
+        'user_id': _getUserID(),
+        'name': _getName(),
+        'profile_picture': _getProfilePicture(),
+        'token': _getToken(),
+      };
 }
