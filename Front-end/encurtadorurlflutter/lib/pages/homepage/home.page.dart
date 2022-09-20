@@ -54,7 +54,7 @@ class _HomePageState extends State<HomePage> {
                                   callback: () {
                                     setState(() {
                                       loading = true;
-                                      shortenUrl(url: linkController.text);
+                                      shortenUrl(linkController.text, '-');
                                     });
                                   }),
                             ),
@@ -91,7 +91,7 @@ class _HomePageState extends State<HomePage> {
                                                 .text.isNotEmpty) {
                                               loading = true;
                                               shortenUrl(
-                                                  url: linkController.text);
+                                                  linkController.text, '-');
                                             }
                                           });
                                         },
@@ -229,7 +229,7 @@ class _HomePageState extends State<HomePage> {
       );
 
   // consumindo API para encurtar
-  void shortenUrl({required String url}) async {
+  void shortenUrl(String url, String username) async {
     try {
       final responseURL = await http.post(
         Uri.parse('http://127.0.0.1:8080'),
@@ -239,13 +239,12 @@ class _HomePageState extends State<HomePage> {
           'Content-Type': 'application/json',
         },
         body: jsonEncode(<String, String>{
-          'username': '-',
+          'username': username,
           'url_original': url,
         }),
       );
 
-      Map<String, dynamic> response =
-          jsonDecode(responseURL.body);
+      Map<String, dynamic> response = jsonDecode(responseURL.body);
 
       if (responseURL.statusCode == 201) {
         setState(() {

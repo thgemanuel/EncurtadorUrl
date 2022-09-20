@@ -5,19 +5,38 @@ import 'package:responsive_data_grid/responsive_data_grid.dart';
 import '../../../class/data.table.class.dart';
 
 class TableLinks extends StatefulWidget {
-  const TableLinks({Key? key}) : super(key: key);
+  final listLinks;
+  const TableLinks({
+    Key? key,
+    required this.listLinks,
+  }) : super(key: key);
 
   @override
   State<TableLinks> createState() => _TableLinksState();
 }
 
 class _TableLinksState extends State<TableLinks> {
-  var exampleData = List<ExampleData>.from(<ExampleData>[
-    ExampleData(1, "John Doe", "John Doe", DateTime(1977, 6, 17)),
-    ExampleData(2, "Jane Doe", "John Doe", DateTime(1977, 6, 17)),
-    ExampleData(3, "John Doe", "John Doe", DateTime(1977, 6, 17)),
-    ExampleData(4, "Jane Doe", "John Doe", DateTime(1977, 6, 17)),
+  var exampleData = List<DataTableLinks>.from(<DataTableLinks>[
+    DataTableLinks(1, "John Doe", "John Doe", DateTime(1977, 6, 17)),
+    DataTableLinks(2, "Jane Doe", "John Doe", DateTime(1977, 6, 17)),
+    DataTableLinks(3, "John Doe", "John Doe", DateTime(1977, 6, 17)),
+    DataTableLinks(4, "Jane Doe", "John Doe", DateTime(1977, 6, 17)),
   ]);
+
+  List<DataTableLinks> dataTableLinks = [];
+
+  preencheDadosParaTabela() {
+    for (var url in widget.listLinks) {
+      print(url);
+      // this.dataTableLinks.add(new DataTableLinks(id, urlOriginal, urlEncurtada, data))
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    preencheDadosParaTabela();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +60,7 @@ class _TableLinksState extends State<TableLinks> {
                           color: Colors.white,
                           child: Column(
                             children: [
-                              ResponsiveDataGrid<ExampleData>.clientSide(
+                              ResponsiveDataGrid<DataTableLinks>.clientSide(
                                 title: const TitleDefinition(
                                   backgroundColor: Colors.white,
                                   title: "Links já encurtados",

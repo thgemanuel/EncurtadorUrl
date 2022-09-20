@@ -1,10 +1,10 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../class/SideNav.class.dart';
 import '../../class/sharedPref.class.dart';
 import 'widgets/card.link.dart';
+import 'package:http/http.dart' as http;
 import 'widgets/table.link.dart';
 
 class DashBoardPage extends StatefulWidget {
@@ -18,12 +18,39 @@ class _DashBoardPageState extends State<DashBoardPage> {
   int navIndex = 0;
   String tituloPagina = "Visão Geral";
   late Future<Map<String, dynamic>> _user_info;
-  late Future<Map<String, dynamic>> _urlsInfo;
+  late Map<String, dynamic> _urlsInfo;
+
+// consumindo API para encurtar
+  Future<Map<String, dynamic>> loadLinks(String username) async {
+    final queryParams = <String, String>{'user_id': username};
+
+    final uriDF = Uri.https(
+        'southamerica-east1-predictive-maintenance-41ea8.cloudfunctions.net',
+        '/get-info-df',
+        queryParams);
+
+    final response = await http.get(
+      //Uri.parse('http://127.0.0.1:8080?user_id='+user_id+'&Token='+token)
+      uriDF,
+      headers: <String, String>{
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json'
+      },
+    );
+
+    Map<String, dynamic> urls_information = jsonDecode(response.body);
+
+    if (response.statusCode == 200) {
+      setState(() {
+        loading = false;
+      });
+    }
+    return urls_information['urls'];
+  }
 
   Future<Map<String, dynamic>> loadUser() async {
     var userInfo = await SharedPref().read('user_info');
-    // this._urlsInfo = loadCardsInfo(
-    //     userInfo['username'], userInfo['token'], userInfo['companyId']);
+    this._urlsInfo = await loadLinks(userInfo['user_id']);
     return userInfo;
   }
 
@@ -72,7 +99,7 @@ class _DashBoardPageState extends State<DashBoardPage> {
                           onTap: () {},
                           child: CircleAvatar(
                             backgroundImage: MemoryImage(base64Decode(
-                                  snapshot.data?['profile_picture'])),
+                                snapshot.data?['profile_picture'])),
                           ),
                         ),
                       ),
@@ -104,9 +131,13 @@ class _DashBoardPageState extends State<DashBoardPage> {
                 builder: (context, constraint) {
                   switch (navIndex) {
                     case 0:
-                      return const CardLinkLogado();
+                      return CardLinkLogado(
+                        username: snapshot.data?['user_id'],
+                      );
                     case 1:
-                      return const TableLinks();
+                      return TableLinks(
+                        listLinks: this._urlsInfo,
+                      );
                     default:
                       return const Center();
                   }
@@ -125,10 +156,6 @@ class _DashBoardPageState extends State<DashBoardPage> {
                     height: 60,
                     child: CircularProgressIndicator(),
                   ),
-                  const Padding(
-                    padding: EdgeInsets.only(top: 16),
-                    child: Text('Aguardando resultados...'),
-                  )
                 ],
               ),
             );
