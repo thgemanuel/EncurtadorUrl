@@ -3,10 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:test_encurtar_link/pages/dashboardpage/widgets/textfieldlink.logado.widget.dart';
 import 'package:test_encurtar_link/widgets/loading.button.dart';
+import 'package:url_launcher/url_launcher_string.dart';
+import '../../../class/getUrlOriginal.class.dart';
 import '../../../widgets/text.submitbutton.dart';
 import 'package:http/http.dart' as http;
 
 bool loading = false;
+bool loadingUrl = false;
 
 class CardLinkLogado extends StatefulWidget {
   final username;
@@ -147,7 +150,27 @@ class _CardLinkLogadoState extends State<CardLinkLogado> {
                             GestureDetector(
                               child: Container(
                                 color: Colors.grey.withOpacity(.2),
-                                child: Text(resultUrl),
+                                child: InkWell(
+                                  onTap: () async {
+                                    setState(
+                                      () {
+                                        loadingUrl = true;
+                                      },
+                                    );
+                                    Map<String, dynamic> urlredirecionamento =
+                                        await getUrlOriginal(resultUrl);
+                                    launchUrlString(urlredirecionamento['body']
+                                        ['url_original']);
+                                    setState(
+                                      () {
+                                        loadingUrl = false;
+                                      },
+                                    );
+                                  },
+                                  child: loadingUrl
+                                      ? CircularProgressIndicator()
+                                      : Text(resultUrl),
+                                ),
                               ),
                             ),
                             const Spacer(),
