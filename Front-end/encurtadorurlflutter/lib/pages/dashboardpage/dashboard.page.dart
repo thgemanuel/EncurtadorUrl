@@ -18,19 +18,18 @@ class _DashBoardPageState extends State<DashBoardPage> {
   int navIndex = 0;
   String tituloPagina = "Visão Geral";
   late Future<Map<String, dynamic>> _user_info;
-  late Map<String, dynamic> _urlsInfo;
+  late Future<Map<String, dynamic>> _urlsInfo;
 
 // consumindo API para encurtar
-  Future<Map<String, dynamic>> loadLinks(String username) async {
-    final queryParams = <String, String>{'user_id': username};
+  Future<Map<String, dynamic>> loadLinks(String token) async {
+    final queryParams = <String, String>{'token': token};
 
     final uriDF = Uri.https(
-        'southamerica-east1-predictive-maintenance-41ea8.cloudfunctions.net',
-        '/get-info-df',
+        'southamerica-east1-encurtador-url-thg.cloudfunctions.net',
+        '/geturlsuser',
         queryParams);
 
     final response = await http.get(
-      //Uri.parse('http://127.0.0.1:8080?user_id='+user_id+'&Token='+token)
       uriDF,
       headers: <String, String>{
         'Access-Control-Allow-Origin': '*',
@@ -45,12 +44,12 @@ class _DashBoardPageState extends State<DashBoardPage> {
         loading = false;
       });
     }
-    return urls_information['urls'];
+    return urls_information;
   }
 
   Future<Map<String, dynamic>> loadUser() async {
     var userInfo = await SharedPref().read('user_info');
-    this._urlsInfo = await loadLinks(userInfo['user_id']);
+    this._urlsInfo = loadLinks(userInfo['token']);
     return userInfo;
   }
 

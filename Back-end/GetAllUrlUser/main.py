@@ -1,13 +1,9 @@
-from datetime import datetime, timedelta
-from math import trunc
-from select import select
-from bson.objectid import ObjectId
 from typing import Union
 import pymongo
 import urllib
 import jwt
-import hashlib
-
+from flask import request
+from functools import wraps
 
 secret_key = 'Wh$hOPdRhXyypJvVQ0%HRnM#wCD$7vRL2aORTFOhsS%DRycvhp'
 
@@ -25,7 +21,7 @@ def check_input(input):
     """
     Checks the input
     """
-    return True if 'user_id' in input\
+    return True if 'token' in input\
         else False
 
 def buscaUrlsUser(username):
@@ -60,6 +56,35 @@ def obtemUrlsUser(username) -> Union[dict, int]:
         }
         return message_to_request,404
 
+def check_user(username):
+    user_column = selected_database['Usuarios']
+    try:
+        user = user_column.find_one({"_id": username})
+        if user is None:
+            return False
+        else:
+            return True 
+    except:
+        return False
+
+
+def token_required(f):
+    @wraps(f)
+    def decorated(self, *args, **kwargs):
+        request_data = request.args
+        if not('token' in request_data):
+            return ({'message':'Token missing!'}, 403)
+        token = request_data['token']
+        try:
+            data = jwt.decode(token, key=secret_key, algorithms="HS256")
+            if not check_user(data['user']):
+                return ({'message': 'This user doesn’t have permission'}, 401) 
+        except :
+            return ({'message': 'Token is invalid'}, 403)
+        return f(self,*args, **kwargs)
+    return decorated
+
+@token_required
 def main(request):
 
     message_to_request: dict
@@ -81,10 +106,11 @@ def main(request):
     if request_method == "GET":
         has_url = check_input(request.args)
         if has_url:
-            username = request.args.get("username")
+            user_info = jwt.decode(request.args['token'], key=secret_key, algorithms="HS256")
+            username = user_info['user']
             message_to_request, status_code = obtemUrlsUser(username)
-            print(type(message_to_request))
-            print(status_code)
+            # print(type(message_to_request))
+            # print(status_code)
             return message_to_request, status_code,headers
         else:
             return ({

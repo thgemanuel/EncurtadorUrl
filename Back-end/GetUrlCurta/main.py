@@ -1,15 +1,6 @@
-from datetime import datetime, timedelta
-from math import trunc
-from select import select
-from bson.objectid import ObjectId
 from typing import Union
 import pymongo
 import urllib
-import jwt
-import hashlib
-
-
-secret_key = 'Wh$hOPdRhXyypJvVQ0%HRnM#wCD$7vRL2aORTFOhsS%DRycvhp'
 
 # Definições para conexão com o banco de dados MongoDB.
 mongo_cluster_password = urllib.parse.quote('senha123')

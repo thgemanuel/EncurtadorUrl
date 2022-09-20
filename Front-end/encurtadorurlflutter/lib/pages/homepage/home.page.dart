@@ -2,11 +2,14 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:test_encurtar_link/widgets/loading.button.dart';
+import 'package:url_launcher/url_launcher_string.dart';
+import '../../class/getUrlOriginal.class.dart';
 import '../../widgets/text.submitbutton.dart';
 import 'widgets/textfieldlink.widget.dart';
 import 'package:http/http.dart' as http;
 
 bool loading = false;
+bool loadingUrl = false;
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -177,7 +180,26 @@ class _HomePageState extends State<HomePage> {
                             GestureDetector(
                               child: Container(
                                 color: Colors.grey.withOpacity(.2),
-                                child: Text(resultUrl),
+                                child: InkWell(
+                                  onTap: () async {
+                                    setState(
+                                      () {
+                                        loadingUrl = true;
+                                      },
+                                    );
+                                    Map<String, dynamic> urlredirecionamento =
+                                        await getUrlOriginal(resultUrl);
+                                    launchUrlString(urlredirecionamento['body']['url_original']);
+                                    setState(
+                                      () {
+                                        loadingUrl = false;
+                                      },
+                                    );
+                                  },
+                                  child: loadingUrl
+                                      ? CircularProgressIndicator()
+                                      : Text(resultUrl),
+                                ),
                               ),
                             ),
                             const Spacer(),
@@ -232,8 +254,8 @@ class _HomePageState extends State<HomePage> {
   void shortenUrl(String url, String username) async {
     try {
       final responseURL = await http.post(
-        Uri.parse('http://127.0.0.1:8080'),
-        //uriDF,
+        Uri.parse(
+            'https://southamerica-east1-encurtador-url-thg.cloudfunctions.net/geraurl'),
         headers: <String, String>{
           'Access-Control-Allow-Origin': '*',
           'Content-Type': 'application/json',
