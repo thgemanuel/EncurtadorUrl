@@ -43,7 +43,7 @@ def salvaUrlEncurtada(username, url_original, url_encurtada):
     event_obj = {
         'user_id': username,
         'url_original': url_original,
-        'url_encurtada': url_encurtada,
+        'url_encurtada': f"https://{url_encurtada}",
         'timestamp': timestamp
     }
 
@@ -68,13 +68,13 @@ def teste_url(url_encurtada):
 def generate_message_to_request(url_encurtada) -> dict:
     message_to_request = {
         "message": "Url encurtada!",
-        "url_encurtada": url_encurtada,
+        "url_encurtada": f"https://{url_encurtada}",
     }
     return message_to_request
 
 def encurtaUrl(username, url_original) -> Union[dict, int]:
    
-    hash_object = hashlib.sha256(url_original)
+    hash_object = hashlib.sha256(url_original.encode('utf-8'))
     url_encurtada = hash_object.hexdigest()[:7]
     url_ja_encurtada = teste_url(url_encurtada)
     message_to_request = generate_message_to_request(url_encurtada)
