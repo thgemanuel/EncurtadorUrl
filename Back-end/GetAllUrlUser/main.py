@@ -25,7 +25,7 @@ def check_input(input):
     """
     Checks the input
     """
-    return True if 'url_encurtada' in input\
+    return True if 'user_id' in input\
         else False
 
 def buscaUrlsUser(username):
