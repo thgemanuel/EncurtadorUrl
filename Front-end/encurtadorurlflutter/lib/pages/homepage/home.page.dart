@@ -232,8 +232,7 @@ class _HomePageState extends State<HomePage> {
   void shortenUrl(String url, String username) async {
     try {
       final responseURL = await http.post(
-        Uri.parse('http://127.0.0.1:8080'),
-        //uriDF,
+        Uri.parse('https://southamerica-east1-encurtador-url-thg.cloudfunctions.net/geraurl'),
         headers: <String, String>{
           'Access-Control-Allow-Origin': '*',
           'Content-Type': 'application/json',

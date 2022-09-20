@@ -25,7 +25,8 @@ class _LoginPageState extends State<LoginPage> {
 
   void fetchUsuario(String username, String password) async {
     final response = await http.post(
-      Uri.parse('http://127.0.0.1:8080'),
+      Uri.parse(
+          'https://southamerica-east1-encurtador-url-thg.cloudfunctions.net/authentication'),
       headers: <String, String>{
         'Access-Control-Allow-Origin': '*',
         'Content-Type': 'application/json',
