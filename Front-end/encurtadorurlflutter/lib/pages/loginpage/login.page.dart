@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:test_encurtar_link/pages/loginpage/widgets/backHome.button.dart';
 import '../../class/sharedPref.class.dart';
-import '../../class/usuario.class.dart';
+import '../../class/Usuario.class.dart';
 import '../../functions/authentication.function.dart';
 import '../../widgets/text.submitbutton.dart';
 import 'widgets/textfieldemail.widget.dart';
@@ -26,7 +26,7 @@ class _LoginPageState extends State<LoginPage> {
   void fetchUsuario(String username, String password) async {
     final response = await http.post(
       Uri.parse(
-          'https://us-central1-encurtador-url-thg.cloudfunctions.net/function-1'),
+          'https://southamerica-east1-encurtador-url-thg.cloudfunctions.net/authentication'),
       headers: <String, String>{
         'Access-Control-Allow-Origin': '*',
         'Content-Type': 'application/json',
@@ -42,9 +42,11 @@ class _LoginPageState extends State<LoginPage> {
         loading = false;
         emailController.clear();
         passwordController.clear();
-        SharedPref()
-            .save('user_info', Usuario.fromJson(jsonDecode(response.body)));
 
+        SharedPref().save(
+          'user_info',
+          Usuario.fromJson(jsonDecode(response.body)),
+        );
         Navigator.of(context).pushNamed('/dashboard');
       });
     } else {
