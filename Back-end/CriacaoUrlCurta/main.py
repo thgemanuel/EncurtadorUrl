@@ -26,10 +26,10 @@ def check_input(input):
     Checks the input
     """
     return True if 'username' in input \
-        and 'original_url' in input\
+        and 'url_original' in input\
         else False
 
-def salvaUrlEncurtada(username, original_url, url_encurtada):
+def salvaUrlEncurtada(username, url_original, url_encurtada):
     #Pegando timestamp da requisição
     datetime_now = datetime.now()
     timestamp = datetime.timestamp(datetime_now)
@@ -42,7 +42,7 @@ def salvaUrlEncurtada(username, original_url, url_encurtada):
 
     event_obj = {
         'user_id': username,
-        'original_url': original_url,
+        'url_original': url_original,
         'url_encurtada': url_encurtada,
         'timestamp': timestamp
     }
@@ -72,9 +72,9 @@ def generate_message_to_request(url_encurtada) -> dict:
     }
     return message_to_request
 
-def encurtaUrl(username, original_url) -> Union[dict, int]:
+def encurtaUrl(username, url_original) -> Union[dict, int]:
    
-    hash_object = hashlib.sha256(original_url)
+    hash_object = hashlib.sha256(url_original)
     url_encurtada = hash_object.hexdigest()[:7]
     url_ja_encurtada = teste_url(url_encurtada)
     message_to_request = generate_message_to_request(url_encurtada)
@@ -82,7 +82,7 @@ def encurtaUrl(username, original_url) -> Union[dict, int]:
     if url_ja_encurtada:
         return message_to_request,200
 
-    salvaUrlEncurtada(username, original_url, url_encurtada)
+    salvaUrlEncurtada(username, url_original, url_encurtada)
     return message_to_request,201
 
 
@@ -109,8 +109,8 @@ def main(request):
         has_user_and_url = check_input(body_request)
         if has_user_and_url:
             username = body_request.get("username")
-            original_url = body_request.get("original_url")
-            message_to_request, status_code = encurtaUrl(username, original_url)
+            url_original = body_request.get("url_original")
+            message_to_request, status_code = encurtaUrl(username, url_original)
             print(type(message_to_request))
             print(status_code)
             return message_to_request, status_code,headers
