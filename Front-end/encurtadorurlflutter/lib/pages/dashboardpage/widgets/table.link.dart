@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:responsive_data_grid/responsive_data_grid.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../../class/data.table.class.dart';
 
@@ -33,7 +34,7 @@ class _TableLinksState extends State<TableLinks> {
             idIncrement,
             url['url_original'],
             url['url_encurtada'],
-            new DateTime.fromMillisecondsSinceEpoch(url['timestamp'])),
+            new DateTime.fromMillisecondsSinceEpoch(url['timestamp'] * 1000)),
       );
 
       idIncrement += 1;
@@ -62,7 +63,7 @@ class _TableLinksState extends State<TableLinks> {
                     body: Center(
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: SizedBox(
+                        child: Container(
                           child: Center(
                             child: ListView(
                               shrinkWrap: true,
@@ -83,7 +84,7 @@ class _TableLinksState extends State<TableLinks> {
                                         ),
                                         items: dataTableLinks,
                                         itemTapped: (row) =>
-                                            print(row.urlEncurtada),
+                                            launchUrlString(row.urlOriginal),
                                         pageSize: 10,
                                         pagingMode: PagingMode.auto,
                                         columns: [
