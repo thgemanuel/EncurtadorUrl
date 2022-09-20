@@ -2,9 +2,6 @@ from typing import Union
 import pymongo
 import urllib
 
-
-secret_key = 'Wh$hOPdRhXyypJvVQ0%HRnM#wCD$7vRL2aORTFOhsS%DRycvhp'
-
 # Definições para conexão com o banco de dados MongoDB.
 mongo_cluster_password = urllib.parse.quote('senha123')
 database = 'EncurtadorUrl'
