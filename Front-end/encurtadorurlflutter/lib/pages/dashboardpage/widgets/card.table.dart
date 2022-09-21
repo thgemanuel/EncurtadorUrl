@@ -1,0 +1,148 @@
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:responsive_data_grid/responsive_data_grid.dart';
+import 'package:url_launcher/url_launcher_string.dart';
+
+import '../../../class/data.table.class.dart';
+
+class CardTable extends StatefulWidget {
+  final list;
+  const CardTable({
+    Key? key,
+    required this.list,
+  }) : super(key: key);
+
+  @override
+  State<CardTable> createState() => _CardTableState();
+}
+
+class _CardTableState extends State<CardTable> {
+  List<DataTableLinks> dataTableLinks = [];
+
+  preencheDadosParaTabela() {
+    int idIncrement = 1;
+    for (var url in widget.list) {
+      dataTableLinks.add(
+        new DataTableLinks(
+            idIncrement,
+            url['url_original'],
+            url['url_encurtada'],
+            new DateTime.fromMillisecondsSinceEpoch(url['timestamp'] * 1000)),
+      );
+
+      idIncrement += 1;
+    }
+    print("chamou");
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    preencheDadosParaTabela();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              child: Center(
+                child: ListView(
+                  shrinkWrap: true,
+                  children: [
+                    Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      color: Colors.white,
+                      child: Column(
+                        children: [
+                          ResponsiveDataGrid<DataTableLinks>.clientSide(
+                            title: const TitleDefinition(
+                              backgroundColor: Colors.white,
+                              title: "Links já encurtados",
+                              icon: Icon(Icons.link_rounded),
+                            ),
+                            items: dataTableLinks,
+                            itemTapped: (row) =>
+                                launchUrlString(row.urlOriginal),
+                            pageSize: 10,
+                            pagingMode: PagingMode.auto,
+                            columns: [
+                              IntColumn(
+                                smallCols: 1,
+                                xsCols: 5,
+                                mediumCols: 2,
+                                fieldName: "id",
+                                header: const ColumnHeader(
+                                  backgroundColor:
+                                      Color.fromARGB(255, 118, 177, 255),
+                                  text: "Id",
+                                  // showFilter: true,
+                                  showOrderBy: true,
+                                ),
+                                value: (row) => row.id,
+                              ),
+                              StringColumn(
+                                xsCols: 5,
+                                mediumCols: 2,
+                                fieldName: "urlO",
+                                filterRules: StringFilterRules(
+                                  hintText: "Url Original",
+                                ),
+                                header: const ColumnHeader(
+                                  text: "Url Original",
+                                  // showFilter: true,
+                                  showOrderBy: true,
+                                ),
+                                value: (row) => row.urlOriginal,
+                              ),
+                              StringColumn(
+                                xsCols: 5,
+                                mediumCols: 2,
+                                fieldName: "urlE",
+                                filterRules: StringFilterRules(
+                                  hintText: "Url Encurtada",
+                                ),
+                                header: const ColumnHeader(
+                                  text: "Url Encurtada",
+                                  // showFilter: true,
+                                  showOrderBy: true,
+                                ),
+                                value: (row) => row.urlEncurtada,
+                              ),
+                              DateTimeColumn(
+                                xsCols: 4,
+                                mediumCols: 3,
+                                fieldName: "data",
+                                filterRules: DateTimeFilterRules(
+                                  filterType: DateTimeFilterTypes.DateOnly,
+                                ),
+                                header: const ColumnHeader(
+                                  text: "Data criação",
+                                  // showFilter: true,
+                                  showOrderBy: true,
+                                ),
+                                value: (row) => row.data,
+                                format: DateFormat.YEAR_MONTH_DAY,
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
