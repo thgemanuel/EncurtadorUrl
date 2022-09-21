@@ -1,14 +1,10 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:responsive_data_grid/responsive_data_grid.dart';
 import 'package:test_encurtar_link/class/links.datasource.class.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import '../../../class/data.table.class.dart';
-import 'package:syncfusion_flutter_core/theme.dart';
-import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 class CardTable extends StatefulWidget {
   final list;
