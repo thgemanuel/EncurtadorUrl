@@ -93,13 +93,38 @@ class _DashBoardPageState extends State<DashBoardPage> {
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: InkWell(
-                          customBorder: const CircleBorder(),
-                          onTap: () {},
+                        child: PopupMenuButton(
+                          splashRadius: 1,
                           child: CircleAvatar(
                             backgroundImage: MemoryImage(base64Decode(
                                 snapshot.data?['profile_picture'])),
                           ),
+                          onSelected: (result){
+                            if(result == 0){
+                              setState(() {
+                                SharedPref().remove(
+                                  'user_info',
+                                );
+                                Navigator.of(context).pushNamed('/');
+                              });
+                            }
+                          },
+                          itemBuilder: (BuildContext context) {
+                            return [
+                              PopupMenuItem(
+                                onTap: () {
+                                  
+                                },
+                                value: 0,
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.logout),
+                                    Text("Logout"),
+                                  ],
+                                ),
+                              )
+                            ];
+                          },
                         ),
                       ),
                     ],
