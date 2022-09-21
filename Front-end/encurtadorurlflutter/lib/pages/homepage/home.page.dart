@@ -187,6 +187,7 @@ class _HomePageState extends State<HomePage> {
                                         loadingUrl = true;
                                       },
                                     );
+                                    // obtendo url origninal na base de dados 
                                     Map<String, dynamic> urlredirecionamento =
                                         await getUrlOriginal(resultUrl);
                                     launchUrlString(urlredirecionamento['body']['url_original']);

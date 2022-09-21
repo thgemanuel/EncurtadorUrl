@@ -36,13 +36,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.0"
-  bootstrap_grid:
-    dependency: transitive
-    description:
-      name: bootstrap_grid
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.4"
   build:
     dependency: transitive
     description:
@@ -120,13 +113,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.1"
-  client_filtering:
-    dependency: transitive
-    description:
-      name: client_filtering
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.0.20"
   clock:
     dependency: transitive
     description:
@@ -176,13 +162,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.2.4"
-  date_time_picker:
-    dependency: transitive
-    description:
-      name: date_time_picker
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.1.0"
   fake_async:
     dependency: transitive
     description:
@@ -280,13 +259,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.0.1"
-  infinite_scroll_pagination:
-    dependency: transitive
-    description:
-      name: infinite_scroll_pagination
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "3.2.0"
   intl:
     dependency: transitive
     description:
@@ -455,13 +427,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.2.1"
-  responsive_data_grid:
-    dependency: "direct main"
-    description:
-      name: responsive_data_grid
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.0.25"
   shared_preferences:
     dependency: "direct main"
     description:
@@ -537,13 +502,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.99"
-  sliver_tools:
-    dependency: transitive
-    description:
-      name: sliver_tools
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.2.8"
   source_span:
     dependency: transitive
     description:
@@ -579,6 +537,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.0"
+  syncfusion_flutter_core:
+    dependency: transitive
+    description:
+      name: syncfusion_flutter_core
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "20.2.50"
+  syncfusion_flutter_datagrid:
+    dependency: "direct main"
+    description:
+      name: syncfusion_flutter_datagrid
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "20.2.50"
   term_glyph:
     dependency: transitive
     description:
