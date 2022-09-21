@@ -8,7 +8,6 @@ class RouteGenerator {
     final args = settings.arguments;
 
     switch (settings.name) {
-      // case '/':
       case '/':
         return MaterialPageRoute(
           builder: (_) => const HomePage(),
@@ -17,7 +16,6 @@ class RouteGenerator {
         return MaterialPageRoute(
           builder: (_) => const LoginPage(),
         );
-      // case '/dashboard':
       case '/dashboard':
         return MaterialPageRoute(
             builder: (_) => const DashBoardPage(),
